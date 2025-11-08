@@ -1,0 +1,28 @@
+# version: '3.7' # deprecated per Docker compose documentation
+services:
+# REST API running on Node JS container
+  app:
+    container_name: lafs-api
+    restart: always # restarts container until its removal
+    build: .
+    ports:
+      - "3000:3000"
+    # Create link to mongodb container
+    links:
+      - mongo
+    # Define environmental variables for database connection
+    environment:
+      - DB_HOST=mongo
+      - DB_NAME=lafs-db
+    # Mongo DB container
+  mongo:
+    container_name: lafs-db
+    image: mongo:latest # use latest mongo image
+    ports: 
+      - "27017:27017"
+
+# Define default network
+networks:
+  default:
+    name: lafs-net
+    external: true
